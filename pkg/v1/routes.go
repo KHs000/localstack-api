@@ -15,6 +15,11 @@ func SQSPong(w http.ResponseWriter, r *http.Request) {
 
 // CreateQueue TODO
 func CreateQueue(w http.ResponseWriter, r *http.Request) {
+	if !POST(r) {
+		http.NotFound(w, r)
+		return
+	}
+
 	dec := json.NewDecoder(r.Body)
 	body := struct {
 		QueueName string `json:"queueName"`
@@ -34,4 +39,20 @@ func CreateQueue(w http.ResponseWriter, r *http.Request) {
 	}
 	w.WriteHeader(http.StatusCreated)
 	fmt.Fprintf(w, url)
+}
+
+// ListQueues TODO
+func ListQueues(w http.ResponseWriter, r *http.Request) {
+	if !GET(r) {
+		http.NotFound(w, r)
+		return
+	}
+
+	lst, err := localsqs.List()
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		fmt.Fprintf(w, "could not get queues list")
+		return
+	}
+	fmt.Fprintf(w, fmt.Sprintf("%v", lst))
 }

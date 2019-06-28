@@ -36,3 +36,15 @@ func Create(name string) (string, error) {
 
 	return aws.StringValue(out.QueueUrl), nil
 }
+
+// List TODO
+func List() ([]string, error) {
+	client := sqsClient()
+
+	out, err := client.ListQueues(&sqs.ListQueuesInput{})
+	if err != nil {
+		return nil, err
+	}
+
+	return aws.StringValueSlice(out.QueueUrls), nil
+}

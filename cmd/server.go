@@ -27,8 +27,6 @@ func (h sqsHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		http.NotFound(w, r)
 		return
 	}
-
-	w.WriteHeader(http.StatusAccepted)
 }
 
 func main() {
@@ -37,6 +35,7 @@ func main() {
 	v1mux.Handle(v1sqsPrefix, sqsHandler{BaseRoute: v1sqsPrefix})
 	v1mux.HandleFunc(v1sqsPrefix+"/ping", v1.SQSPong)
 	v1mux.HandleFunc(v1sqsPrefix+"/create", v1.CreateQueue)
+	v1mux.HandleFunc(v1sqsPrefix+"/list", v1.ListQueues)
 
 	log.Println("Server up...")
 	http.ListenAndServe(":8082", v1mux)
