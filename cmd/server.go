@@ -33,9 +33,10 @@ func main() {
 	v1mux := http.NewServeMux()
 
 	v1mux.Handle(v1sqsPrefix, sqsHandler{BaseRoute: v1sqsPrefix})
-	v1mux.HandleFunc(v1sqsPrefix+"/ping", v1.SQSPong)
 	v1mux.HandleFunc(v1sqsPrefix+"/create", v1.CreateQueue)
+	v1mux.HandleFunc(v1sqsPrefix+"/attributes", v1.GetQueueAttributes)
 	v1mux.HandleFunc(v1sqsPrefix+"/list", v1.ListQueues)
+	v1mux.HandleFunc(v1sqsPrefix+"/purge", v1.PurgeQueue)
 
 	log.Println("Server up...")
 	http.ListenAndServe(":8082", v1mux)
